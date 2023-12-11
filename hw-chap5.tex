@@ -1,0 +1,437 @@
+% -----------------------------*- LaTeX -*------------------------------
+\documentclass[UTF8]{report}
+% ------------------------------------------------------------------------
+% Packages
+% ------------------------------------------------------------------------
+\usepackage{ctex}
+\usepackage[body={7in, 9in},left=1in,right=1in]{geometry}
+\usepackage{amsmath,amsfonts,amssymb,bm,amsthm}%数学宏包、数学字体、数学符号、支持 \mathscr{} 字体、支持粗斜体 \bm{}、数学定理
+\usepackage{graphicx}%支持 \includegraphics{} 插图
+\usepackage{subfigure}%插入子图
+\usepackage{nicefrac}
+\usepackage{mathrsfs}
+\usepackage{caption}
+\usepackage{algorithm,algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{fancyhdr}
+\usepackage{adjustbox}
+\usepackage{esint}%支持多种积分算子
+\usepackage{mathtools}%数学宏包的重要补充
+\usepackage{upgreek}%数学环境的直立希腊字母
+\usepackage{enumitem}%自定义列表环境
+\usepackage{color}%支持颜色改变
+\usepackage{extarrows}%任意长度的箭头
+\usepackage{tikz,xcolor}%画图、画 Feynman 图
+\usepackage{breqn}
+\usepackage{fontsize}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{fontspec}
+\usepackage{bigstrut,multirow,rotating}%Excel表格自动导入latex
+\usepackage{booktabs}
+\usepackage{scribe}
+% ------------------------------------------------------------------------
+% Macros
+% ------------------------------------------------------------------------
+%~~~~~~~~~~~~~~~
+% Utility latin
+%~~~~~~~~~~~~~~~
+\newcommand{\ie}{\textit{i.e.}}
+\newcommand{\eg}{\textit{e.g.}}
+%~~~~~~~~~~~~~~~
+% Environment shortcuts
+%~~~~~~~~~~~~~~~
+\newcommand{\balign}[1]{\ealign{\begin{align}#1\end{align}}}
+\newcommand{\baligns}[1]{\ealigns{\begin{align*}#1\end{align*}}}
+\newcommand{\bitemize}[1]{\eitemize{\begin{itemize}#1\end{itemize}}}
+\newcommand{\benumerate}[1]{\eenumerate{\begin{enumerate}#1\end{enumerate}}}
+%~~~~~~~~~~~~~~~
+% Text with quads around it
+%~~~~~~~~~~~~~~~
+\newcommand{\qtext}[1]{\quad\text{#1}\quad}
+%~~~~~~~~~~~~~~~
+% Shorthand for math formatting
+%~~~~~~~~~~~~~~~
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\mbi}[1]{\boldsymbol{#1}} % Bold and italic (math bold italic)
+\newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\mrm}[1]{\mathrm{#1}}
+\newcommand{\tbf}[1]{\textbf{#1}}
+\newcommand{\tsc}[1]{\textsc{#1}}
+%\def\\langle {{\langle }}
+%\def\\rangle {{\rangle }}
+\newcommand{\sT}{\sf T}
+\newcommand{\grad}{\nabla}
+\newcommand{\Proj}{\Pi}
+%~~~~~~~~~~~~~~~
+% Common sets 定义数集符号
+%~~~~~~~~~~~~~~~
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\reals}{\mathbb{R}} % Real number symbol
+\newcommand{\integers}{\mathbb{Z}} % Integer symbol
+\newcommand{\rationals}{\mathbb{Q}} % Rational numbers
+\newcommand{\naturals}{\mathbb{N}} % Natural numbers
+\newcommand{\complex}{\mathbb{C}} % Complex numbers
+%~~~~~~~~~~~~~~~
+% Common functions
+%~~~~~~~~~~~~~~~
+\renewcommand{\exp}[1]{\operatorname{exp}\left(#1\right)} % Exponential
+\newcommand{\indic}[1]{\mbb{I}\left(#1\right)} % Indicator function
+\newcommand{\indicsub}[2]{\mbb{I}_{#2}\left(#1\right)} % Indicator function
+\newcommand{\argmax}{\mathop\mathrm{arg\, max}} % Defining math symbols
+\newcommand{\argmin}{\mathop\mathrm{arg\, min}}
+\renewcommand{\arccos}{\mathop\mathrm{arccos}}
+\newcommand{\dom}{\mathop\mathrm{dom}} % Domain
+\newcommand{\range}{\mathop\mathrm{range}} % Range
+\newcommand{\diag}{\mathop\mathrm{diag}}
+\newcommand{\tr}{\mathop\mathrm{tr}}
+\newcommand{\abs}{\mathop\mathrm{abs}}
+\newcommand{\card}{\mathop\mathrm{card}}
+\newcommand{\sign}{\mathop\mathrm{sign}}
+\newcommand{\prox}{\mathrm{prox}} % prox
+\newcommand{\rank}[1]{\mathrm{rank}(#1)}
+\newcommand{\supp}[1]{\mathrm{supp}(#1)}
+\newcommand{\norm}[1]{\lVert#1\rVert}
+%~~~~~~~~~~~~~~~
+% Common probability symbols
+%~~~~~~~~~~~~~~~
+\newcommand{\family}{\mathcal{P}} % probability family / statistical model
+\newcommand{\iid}{\stackrel{\mathrm{iid}}{\sim}}
+\newcommand{\ind}{\stackrel{\mathrm{ind}}{\sim}}
+\newcommand{\E}{\mathbb{E}} % Expectation symbol
+\newcommand{\Earg}[1]{\E\left[#1\right]}
+\newcommand{\Esubarg}[2]{\E_{#1}\left[#2\right]}
+\renewcommand{\P}{\mathbb{P}} % Probability symbol
+\newcommand{\Parg}[1]{\P\left(#1\right)}
+\newcommand{\Psubarg}[2]{\P_{#1}\left[#2\right]}
+%\newcommand{\Cov}{\mrm{Cov}} % Covariance symbol
+%\newcommand{\Covarg}[1]{\Cov\left[#1\right]}
+%\newcommand{\Covsubarg}[2]{\Cov_{#1}\left[#2\right]}
+%\newcommand{\model}{\mathcal{P}} % probability family / statistical model
+%~~~~~~~~~~~~~~~
+% Distributions
+%~~~~~~~~~~~~~~~
+%\newcommand{\Gsn}{\mathcal{N}}
+%\newcommand{\Ber}{\textnormal{Ber}}
+%\newcommand{\Bin}{\textnormal{Bin}}
+%\newcommand{\Unif}{\textnormal{Unif}}
+%\newcommand{\Mult}{\textnormal{Mult}}
+%\newcommand{\NegMult}{\textnormal{NegMult}}
+%\newcommand{\Dir}{\textnormal{Dir}}
+%\newcommand{\Bet}{\textnormal{Beta}}
+%\newcommand{\Gam}{\textnormal{Gamma}}
+%\newcommand{\Poi}{\textnormal{Poi}}
+%\newcommand{\HypGeo}{\textnormal{HypGeo}}
+%\newcommand{\GEM}{\textnormal{GEM}}
+%\newcommand{\BP}{\textnormal{BP}}
+%\newcommand{\DP}{\textnormal{DP}}
+%\newcommand{\BeP}{\textnormal{BeP}}
+%\newcommand{\Exp}{\textnormal{Exp}}
+%~~~~~~~~~~~~~~~
+% Theorem-like environments
+%~~~~~~~~~~~~~~~
+%\theoremstyle{definition}
+%\newtheorem{definition}{Definition}
+%\newtheorem{example}{Example}
+%\newtheorem{problem}{Problem}
+%\newtheorem{lemma}{Lemma}
+%~~~~~~~~~~~~~~~
+% 组合数学的模板和作业里用到的一些宏包和自定义命令
+%~~~~~~~~~~~~~~~
+\renewcommand{\emph}[1]{\begin{kaishu}#1\end{kaishu}}
+\newcommand{\falfac}[1]{^{\underline{#1}}}
+\newcommand{\binomfrac}[2]{\frac{#1^{\underline{#2}}}{#2!}}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\suminfty}[2]{\sum_{#1=#2}^{\infty}}
+\newcommand{\suminftyk}[0]{\sum_{k=0}^{\infty}}
+\newcommand{\sumint}[3]{\sum_{#1=#2}^{#3}}
+\newcommand{\sumintk}[2]{\sum_{k=#1}^{#2}}
+\newcommand{\suminti}[2]{\sum_{i=#1}^{#2}}
+%~~~~~~~~~~~~~~~
+% 定义新命令
+%~~~~~~~~~~~~~~~
+\newcommand*{\unit}[1]{\mathop{}\!\mathrm{#1}}
+\newcommand*{\dif}{\mathop{}\!\mathrm{d}}%微分算子 d
+\newcommand*{\pdif}{\mathop{}\!\partial}%偏微分算子
+\newcommand*{\cdif}{\mathop{}\!\nabla}%协变导数、nabla 算子
+\newcommand*{\laplace}{\mathop{}\!\Delta}%laplace 算子
+\newcommand*{\deriv}[2]{\frac{\mathrm{d} #1}{\mathrm{d} {#2}}}
+\newcommand*{\derivh}[3]{\frac{\mathrm{d}^{#1} #2}{\mathrm{d} {#3^{#1}}}}
+\newcommand*{\pderiv}[2]{\frac{\partial #1}{\partial {#2}}}
+\newcommand*{\pderivh}[3]{\frac{\partial^{#1} #2}{\partial {#3^{#1}}}}
+\newcommand*{\dderiv}[2]{\dfrac{\mathrm{d} #1}{\mathrm{d} {#2}}}
+\newcommand*{\dderivh}[3]{\dfrac{\mathrm{d}^{#1} #2}{\mathrm{d} {#3^{#1}}}}
+\newcommand*{\dpderiv}[2]{\dfrac{\partial #1}{\partial {#2}}}
+\newcommand*{\dpderivh}[3]{\dfrac{\partial^{#1} #2}{\partial {#3^{#1}}}}
+\newcommand{\me}[1]{\mathrm{e}^{#1}}%e 指数
+\newcommand{\mi}{\mathrm{i}}%虚数单位
+%\newcommand{\mc}{\mathrm{c}}%光速 定义与mathcal冲突
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+%\newcommand{\Rome}[1]{\setcounter{rome}{#1}\Roman{rome}}
+%~~~~~~~~~~~~~~~
+% 公式环境中箭头符号的简写
+%~~~~~~~~~~~~~~~
+\newcommand{\ra}{\rightarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\La}{\Leftarrow}
+\newcommand{\lra}{\leftrightarrow}
+\newcommand{\Lra}{\Leftrightarrow}
+\newcommand{\lgla}{\longleftarrow}
+\newcommand{\Lgla}{\Longleftarrow}
+\newcommand{\lgra}{\longrightarrow}
+\newcommand{\Lgra}{\Longrightarrow}
+\newcommand{\lglra}{\longleftrightarrow}
+\newcommand{\Lglra}{\Longleftrightarrow}
+%~~~~~~~~~~~~~~~
+% 一些数学的环境设置
+%~~~~~~~~~~~~~~~
+%\newcounter{counter_exm}\setcounter{counter_exm}{1}
+%\newcounter{counter_prb}\setcounter{counter_prb}{1}
+%\newcounter{counter_thm}\setcounter{counter_thm}{1}
+%\newcounter{counter_lma}\setcounter{counter_lma}{1}
+%\newcounter{counter_dft}\setcounter{counter_dft}{1}
+%\newcounter{counter_clm}\setcounter{counter_clm}{1}
+%\newcounter{counter_cly}\setcounter{counter_cly}{1}
+%\newtheorem{theorem}{{\hskip 1.7em \bf 定理}}
+%\newtheorem{lemma}[theorem]{\hskip 1.7em 引理}
+%\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem{claim}[theorem]{\hskip 1.7em 命题}
+%\newtheorem{corollary}[theorem]{\hskip 1.7em 推论}
+%\newtheorem{definition}[theorem]{\hskip 1.7em 定义}
+\newcommand{\problem}[1]{{\setlength{\parskip}{10pt}\noindent \bf{#1}}}
+\newenvironment{solution}{{\noindent\hskip 2em \bf 解 \quad}}{}
+\renewenvironment{proof}{{\setlength{\parskip}{7pt}\noindent\hskip 2em \bf 证明 \quad}}{\hfill$\qed$\par}
+%\newenvironment{example}{{\noindent\hskip 2em \bf 例 \arabic{counter_exm}\quad}}{\addtocounter{counter_exm}{1}\par}
+%\newenvironment{concept}[1]{{\bf #1\quad} \begin{kaishu}} {\end{kaishu}\par}
+
+% ----------------------------------------------------------------------
+% Header information
+% ------------------------------------------------------------------------
+
+\begin{document}
+
+\course{B0911005Y-01} 			%optional
+\coursetitle{Introduction to Theory of Computation}	%optional
+\semester{2023 Spring}		%optional
+\lecturer{Mingji Xia}	%optional
+\scribe{吉骏雄}		%required
+\lecturenumber{5}			%required (must be a number)
+\lecturedate{April 28}	%required (omit year)
+
+\maketitle
+
+% ----------------------------------------------------------------------
+% Body of the document
+% ------------------------------------------------------------------------
+
+
+\textbf{第5.1次作业：4.24，补充填空题, 5.4，5.11，5.11中的$0^*1^*$可以替换成具有什么性质的语言？}
+
+\problem{4.24} 设$C $是一个语言。证明$C $是图灵可识别的，当且仅当存在一个可判定语言$D$, 使得$C=\{x \mid \exists y\, (\langle x,y\rangle\in D)\}$。
+
+\begin{proof}
+    仅当: 如果$C$是可识别的, 那么一定存在一个$M_C$识别$C$, 并且存在图灵可识别语言$D$如下: $\langle x,y \rangle \in D$ (其中考虑$y$对应的二进制编码, 将之视作二进制数处理), 当且仅当$x \in C$并且$M_C$仅用至多$\langle y \rangle$步就能进入停机状态. 显然, $M_C$运行$\langle y \rangle$步以上后, 便不可能再接收$x$, 直接将其拒绝; 因此构造能够模拟$M_C$运行的图灵机$M_D$来接收$D$, 它对于任何输入都是会停机的: 若没有达到$\langle y \rangle$步, 则继续, 若达到, 则停机. 这样构造的$M_D$, 对于$M_C$接收的任何一个元素$x$, 由于图灵机计算步骤的有限性, 一定存在计算步骤能使$M_C$在输入$x$后的计算在有限步内停机, 因此存在符合定义的$y$.
+
+    当: 如果存在这样的$D$, 可以构造一个$M_D$判定之. 我们构造$M_C$去识别语言$C$, 方式是: 对输入$x$, 令$M_C$按字符串顺序遍历$\langle y \rangle$的所有可能性, 每次以$\langle x, y \rangle$作为输入, 模拟$M_D$的运行. 若$M_D$接受, 则接受; 若拒绝, 则继续尝试下一个$y$. 这样构造的$M_C$, 对于任意$\langle x,y\rangle\in D$中的$x$, 均能找到$y$使之接收; 但对于其他输入$x$, 均不能停机. 这符合图灵可识别的定义, 且$M_C$识别的语言是$C$.
+
+    两个方向均证毕, 得证.
+\end{proof}
+
+\problem{填（空）题：} （仿照4.24）语言$C$是补图灵可识别的，当且仅当（空）一个可判定语言$D$，使得$C=\{x \mid （空）\}$。
+
+\begin{solution}
+    语言$C$是补图灵可识别的，当且仅当存在一个可判定语言$D$，使得$C=\{x \mid \forall y\, (\langle x,y\rangle\in D')\}$ ($D'$是$D$的补)。
+\end{solution}
+
+\problem{5.4} 如果$A \leq_m B$ 且$B$是一个正则语言，这是否蕴涵着$A$也是一个正则语言？为什么？
+
+\begin{solution}
+    不是. 因为映射归约的过程是可计算函数, 可计算函数是图灵可判定的, 未必能够满足正则语言的要求. 其实$A$是可判定语言即可.
+
+    举例: 语言$A=\{ x \mid x\text{中0,1数量相同} \}$ 是一个可判定语言, 但不是正则语言. $B=\{1 \}$ 是一个正则语言. 由于$A$的可判定性, 存在一个函数$f(x)$, 其值在$x\in A$时为1, 否则为0. 因此$x \in A \Longleftrightarrow f(x) \in B$, 满足映射归约.
+\end{solution}
+
+\problem{5.11} 证明当且仅当$A \leq_m 0^*1^*$时，$A$是可判定的。
+
+\begin{proof}
+    当: $0^*1^*$是可判定的, 根据定理5.16 (如果$A\leq_m B$且$B$是可判定的, 那么$A$也是可判定的), 显然$A$是可判定的。
+
+    仅当: 考虑一个图灵可判定的$A$，那么对应存在一个可计算函数$f$，使任意字符串$x$能够最终进入接受或者拒绝状态, 如果$A$接受$x$，$f(x) = 01$, 否则$f(x) = 10$. 因此$x \in A \Longleftrightarrow f(x) \in B$, 满足映射归约.
+\end{proof}
+
+\problem{5.11附加: } 5.11中的$0^*1^*$可以替换成具有什么性质的语言？
+
+\begin{proof}
+    所有非平凡的可判定语言均可 (即除去 $\Sigma^*$ 与 $\varnothing$ 以外的可判定语言).
+\end{proof}
+
+
+
+
+\textbf{第5.2次作业：2道题}
+
+
+\problem{1} 考虑下面的判定问题:``对于任意给定的图灵机 $M$，判定$M$是否接受字符串 $010$?''
+\begin{enumerate}[label={(\alph*)}]
+    \item 将此判定问题写成为一个语言$L_{010}$，使得图灵机$M$接受字符串$010$当且仅当$\langle M \rangle \in L_{010}$。
+    \item 通过构造从$A_{TM}$到$L_{010}$的归约，用反证法证明$L_{010}$是不可判定的。
+    \item 使用 Rice定理证明$L_{010}$是不可判定的
+\end{enumerate}
+
+\begin{proof}
+    构造语言$L_{010} = \{ \langle M \rangle \mid M \text{ 是图灵机且 } M(010) = 1 \}$.
+    
+    方法一: 
+    
+    我们假设$L_{010}$是可判定的, 那么可以给出一个从$A_{TM}$到$L_{010}$的归约, 进而说明$A_{TM}$的可判定性. 构造能够判定语言$A_{TM}$的图灵机$S$的方法如下:
+
+    $S =$ ``对于输入$\langle M, \omega \rangle$, 其中$M$是图灵机, $\omega$是字符串:
+    \begin{enumerate}
+        \item 构造一个图灵机$M_{\omega}$, 无论给予什么样的输入, 它都能根据输入$\langle M \rangle$来判定图灵机$M$是否接受字符串$\omega$, 选择自己是否接受输入字符串; 即如果$M(\omega) = 1$, 则$M_{\omega} \equiv 1$; 否则$M_{\omega} \equiv 0$.
+        \item 模拟在输入$\langle M_{\omega} \rangle$上运行$L_{010}$
+        \item 如果$L_{010}$接受, 则接受; 如果$L_{010}$拒绝, 则拒绝''
+    \end{enumerate}
+
+    这样, $A_{TM}$就是可判定的. 这与它实际上不可判定的事实矛盾, 因此假设不成立, $L_{010}$是不可判定的.
+
+    方法二: 考虑$\mathcal{P} = \{A \mid A\text{是语言, 且} 010 \in A \}$, 则$L_{010}= \{ \langle M \rangle \mid M \text{ 是图灵机且 } L(M) \in\mathcal{P} \}$. 这样根据Rice定理, 满足如上性质$\mathcal{P}$的图灵机编码集合$L_{010}$是不可判定的.
+\end{proof}
+
+\problem{2} 令$ALL_{TM} = \{ \langle M \rangle \mid M \text{ 是图灵机且 } L(M) = \Sigma^* \}$.
+\begin{enumerate}[label={(\alph*)}]
+    \item 通过构造从$A_{TM}$到$ALL_{TM}$的归约，用反证法证明$ALL_{TM}$是不可判定的.
+    \item 使用 Rice 定理证明$ALL_{TM}$是不可判定的.
+    \item 通过构造从$ALL_{TM}$到$EQ_{TM}$的归约，用反证法证明$EQ_{TM}$是不可判定的. ($EQ_{TM}$的定义见教材 P139)
+\end{enumerate}
+
+\begin{proof}
+    \begin{enumerate}[label={(\alph*)}]
+        \item 我们假设$ALL_{TM}$是可判定的, 那么可以给出一个从$A_{TM}$到$ALL_{TM}$的归约, 进而说明$A_{TM}$的可判定性. 构造能够判定语言$A_{TM}$的图灵机$S$的方法如下:
+
+        $S =$ ``对于输入$\langle M, \omega \rangle$, 其中$M$是图灵机, $\omega$是字符串:
+        \begin{enumerate}
+            \item 构造一个图灵机$M_{\omega}$, 无论给予什么样的输入, 它都能根据输入$\langle M \rangle$来判定图灵机$M$是否接受字符串$\omega$, 选择自己是否接受输入字符串; 即如果$M(\omega) = 1$, 则$M_{\omega} \equiv 1$; 否则$M_{\omega} \equiv 0$.
+            \item 模拟在输入$\langle M_{\omega} \rangle$上运行$ALL_{TM}$
+            \item 如果$ALL_{TM}$接受, 则接受; 如果$ALL_{TM}$拒绝, 则拒绝''
+        \end{enumerate}
+    
+        这样, $A_{TM}$就是可判定的. 这与它实际上不可判定的事实矛盾, 因此假设不成立, $ALL_{TM}$是不可判定的.
+        
+        \item 考虑$\mathcal{P} = \{A \mid A\text{是语言, 且} L(A) = \Sigma^* \} = \{\Sigma^* \}$, 则$ALL_{TM}= \{ \langle M \rangle \mid M \text{ 是图灵机且 } L(M) \in\mathcal{P} \}$. 这样根据Rice定理, 满足如上性质$\mathcal{P}$的图灵机编码集合$ALL_{TM}$是不可判定的.
+        
+        \item 我们假设$EQ_{TM}$是可判定的, 那么可以给出一个从$ALL_{TM}$到$EQ_{TM}$的归约, 进而说明$ALL_{TM}$的可判定性. 构造能够判定语言$ALL_{TM}$的图灵机$S$的方法如下:
+
+        $S =$ ``对于输入$\langle M \rangle$, 其中$M$是图灵机:
+        \begin{enumerate}
+            \item 构造一个图灵机$M_{ALL}$, 满足$L(M_{ALL}) = \Sigma^*$. 由于$\Sigma^*$是正则语言, 所以这件事情很容易做到.
+            \item 模拟在输入$\langle M, M_{ALL} \rangle$上运行$EQ_{TM}$
+            \item 如果$EQ_{TM}$接受, 则接受; 如果$EQ_{TM}$拒绝, 则拒绝''
+        \end{enumerate}
+    
+        这样, $ALL_{TM}$就是可判定的. 这与它实际上不可判定的事实矛盾, 因此假设不成立, $EQ_{TM}$是不可判定的.
+    \end{enumerate}
+\end{proof}
+
+
+
+
+\textbf{第5.3次作业：5.1，5.2，5.10，6.11选做题：5.9}
+
+\problem{5.1}证明$EQ_{CFG}$是不可判定的。
+
+\begin{solution}
+    我们假设$EQ_{CFG}$是可判定的, 那么可以给出一个从$ALL_{CFG}$到$EQ_{CFG}$的归约, 进而说明$ALL_{CFG}$的可判定性. 构造能够判定语言$ALL_{CFG}$的图灵机$S$的方法如下:
+
+    $S =$ ``对于输入$\langle M \rangle$, 其中$M$是PDA:
+    \begin{enumerate}
+        \item 构造一个PDA$M_{ALL}$, 满足$L(M_{ALL}) = \Sigma^*$. 由于$\Sigma^*$是正则语言, 所以这件事情很容易做到.
+        \item 模拟在输入$\langle M, M_{ALL} \rangle$上运行$EQ_{CFG}$
+        \item 如果$EQ_{CFG}$接受, 则接受; 如果$EQ_{CFG}$拒绝, 则拒绝''
+    \end{enumerate}
+
+    这样, $ALL_{CFG}$就是可判定的. 这与它实际上不可判定的事实矛盾, 因此假设不成立, $EQ_{CFG}$是不可判定的.
+\end{solution}
+
+
+
+\problem{5.2}证明$EQ_{CFG}$是补图灵可识别的。
+
+\begin{solution}
+    \textbf{补注: 此问证明有点问题}
+
+    $EQ_{CFG}$的补集是图灵可识别的. 根据定义, $\overline{EQ_{CFG}} = \{ \langle M_1, M_2 \rangle \mid M_1, M_2 \text{ 均为 CFG 且 } L(M_1) \neq L(M_2) \}$. 只需要构造能够判定$\overline{EQ_{CFG}}$的图灵机$S$如下:
+
+    $S=$``对于输入$\langle M_1, M_2 \rangle$, 其中$M_1, M_2$均为CFG:
+    \begin{enumerate}
+        \item 按照标准字符串顺序遍历所有字符串, 依次作为输入; 记某一次取到的字符串为$\omega$.
+        \item 分别模拟在输入$\langle M_1, \omega \rangle$, $\langle M_2, \omega \rangle$上运行$A_{CFG}$.
+        \item 如果$A_{CFG}$均接受或均拒绝, 则重复步骤1, 继续考虑下一个字符串; 如果$A_{CFG}$对其中一个接受, 另一个拒绝, 则拒绝输入$\langle M_1, M_2 \rangle$''
+    \end{enumerate}
+
+    由于$A_{CFG}$是可判定的, 所以$S$是可识别的 (因为对于所有$x \in \overline{EQ_{CFG}}$, 一定会找到一个字符串能让$S$停机; 但是对任何$x \notin \overline{EQ_{CFG}}$, $S$都不能停机, 因为它会一直接受下去).
+\end{solution}
+
+
+
+
+\problem{5.10} 证明当且仅当$A \leq_m A_{TM}$时， $A$是图灵可识别的。
+
+\begin{proof}
+    当: (定理5.22的证明即如此) 存在可计算函数$f$, 使得$\forall \omega \in \Sigma^*\, (\omega \in A \Leftrightarrow f(\omega) \in A_{TM})$. 根据定义构造出图灵机$S$:
+    
+    $S=$``对于输入$\omega$为字符串:
+    \begin{enumerate}
+        \item 模拟某可判定图灵机, 根据输入$\omega$得到输出$f(\omega)$.
+        \item 模拟在输入$f(\omega)$上运行$A_{TM}$.
+        \item 如果$A_{TM}$接受, 则接受; 如果$A_{TM}$拒绝, 则拒绝; 如果$A_{TM}$不停机, 会一直计算下去.
+    \end{enumerate}
+    ''
+
+    已知$A_{TM}$是图灵可识别的, 因此$\forall x\in A$, 其和可计算函数$f$的计算一定会停机, 因此一定能停机并接受. 不过也有可能不停机. 总之$A$是图灵可识别的.
+
+    仅当: 由于$A$是图灵可识别的, 存在一个图灵机$N$能够识别语言$A$. 再构造一个图灵机$S$如下:
+
+    $S=$``对于输入$\omega$为字符串:
+    \begin{enumerate}
+        \item 模拟某可判定图灵机, 根据输入$\omega$得到输出$\langle T, \omega \rangle$.
+        \item 模拟在输入$\langle T, \omega \rangle$上运行$A_{TM}$.
+        \item 如果$A_{TM}$接受, 则接受; 如果$A_{TM}$拒绝, 则拒绝; 如果$A_{TM}$不停机, 会一直计算下去.
+    \end{enumerate}
+    ''
+
+    这样$S$接受字符串$\omega$, 当且仅当$\omega \in A$. 故可计算函数$f(\omega) = \langle T, \omega \rangle$能调用$A_{TM}$, 证明$A \leq_m A_{TM}$.
+
+\end{proof}
+
+
+
+
+\problem{6.11} 证明$\overline{EQ}_{TM}$可由一个带$A_{TM}$的谕示的图灵机识别。
+
+\begin{proof}
+    \textbf{补注: 此问证明有点问题}
+
+    构造图灵机$S$如下：
+    
+    $S=$``对于输入$\langle M_1, M_2 \rangle$, 其中$M_1, M_2$均为图灵机:
+    \begin{enumerate}
+        \item 按照标准字符串顺序 (如若在 $\Sigma^*$ 上即 $0, 1, 00, 01, 10, 11, 000, 001,\,\dots$) 遍历所有字符串, 依次作为输入; 记某一次取到的字符串为$\omega$.
+        \item 向$A_{TM}$询问两个谕示: 分别以$\langle M_1, \omega \rangle$和$\langle M_2, \omega \rangle$为输入, $A_{TM}$会返回何值, 即$M_1, M_2$分别是否接受字符串$\omega$.
+        \item 如果$A_{TM}$均接受或均拒绝, 即$M_1, M_2$ 均接受 $\omega$, 则重复步骤1, 继续考虑下一个字符串; 如果$A_{TM}$对其中一个接受, 另一个拒绝, 则拒绝输入$\langle M_1, M_2 \rangle$''
+    \end{enumerate}
+    ''
+
+    由于 ``某个字符串是否在$A_{TM}$中'' 这件事是谕示给出的, 所以$S$是可识别的 (因为对于所有$x \in \overline{EQ}_{TM}$, 一定会找到一个字符串能让$S$停机; 但是对任何$x \notin \overline{EQ_{CFG}}$, $S$都不能停机, 因为它会一直接受下去).
+\end{proof}
+
+
+
+
+\end{document}

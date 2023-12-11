@@ -1,0 +1,319 @@
+% -----------------------------*- LaTeX -*------------------------------
+\documentclass[UTF8]{report}
+% ------------------------------------------------------------------------
+% Packages
+% ------------------------------------------------------------------------
+\usepackage{ctex}
+\usepackage[body={7in, 9in},left=1in,right=1in]{geometry}
+\usepackage{amsmath,amsfonts,amssymb,bm,amsthm}%数学宏包、数学字体、数学符号、支持 \mathscr{} 字体、支持粗斜体 \bm{}、数学定理
+\usepackage{graphicx}%支持 \includegraphics{} 插图
+\usepackage{subfigure}%插入子图
+\usepackage{nicefrac}
+\usepackage{mathrsfs}
+\usepackage{caption}
+\usepackage{algorithm,algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{fancyhdr}
+\usepackage{adjustbox}
+\usepackage{esint}%支持多种积分算子
+\usepackage{mathtools}%数学宏包的重要补充
+\usepackage{upgreek}%数学环境的直立希腊字母
+\usepackage{enumitem}%自定义列表环境
+\usepackage{color}%支持颜色改变
+\usepackage{extarrows}%任意长度的箭头
+\usepackage{tikz,xcolor}%画图、画 Feynman 图
+\usepackage{breqn}
+\usepackage{fontsize}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{fontspec}
+\usepackage{bigstrut,multirow,rotating}%Excel表格自动导入latex
+\usepackage{booktabs}
+\usepackage{scribe}
+% ------------------------------------------------------------------------
+% Macros
+% ------------------------------------------------------------------------
+%~~~~~~~~~~~~~~~
+% Utility latin
+%~~~~~~~~~~~~~~~
+\newcommand{\ie}{\textit{i.e.}}
+\newcommand{\eg}{\textit{e.g.}}
+%~~~~~~~~~~~~~~~
+% Environment shortcuts
+%~~~~~~~~~~~~~~~
+\newcommand{\balign}[1]{\ealign{\begin{align}#1\end{align}}}
+\newcommand{\baligns}[1]{\ealigns{\begin{align*}#1\end{align*}}}
+\newcommand{\bitemize}[1]{\eitemize{\begin{itemize}#1\end{itemize}}}
+\newcommand{\benumerate}[1]{\eenumerate{\begin{enumerate}#1\end{enumerate}}}
+%~~~~~~~~~~~~~~~
+% Text with quads around it
+%~~~~~~~~~~~~~~~
+\newcommand{\qtext}[1]{\quad\text{#1}\quad}
+%~~~~~~~~~~~~~~~
+% Shorthand for math formatting
+%~~~~~~~~~~~~~~~
+\newcommand{\mbb}[1]{\mathbb{#1}}
+\newcommand{\mbi}[1]{\boldsymbol{#1}} % Bold and italic (math bold italic)
+\newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\mrm}[1]{\mathrm{#1}}
+\newcommand{\tbf}[1]{\textbf{#1}}
+\newcommand{\tsc}[1]{\textsc{#1}}
+%\def\\langle {{\langle }}
+%\def\\rangle {{\rangle }}
+\newcommand{\sT}{\sf T}
+\newcommand{\grad}{\nabla}
+\newcommand{\Proj}{\Pi}
+%~~~~~~~~~~~~~~~
+% Common sets 定义数集符号
+%~~~~~~~~~~~~~~~
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\reals}{\mathbb{R}} % Real number symbol
+\newcommand{\integers}{\mathbb{Z}} % Integer symbol
+\newcommand{\rationals}{\mathbb{Q}} % Rational numbers
+\newcommand{\naturals}{\mathbb{N}} % Natural numbers
+\newcommand{\complex}{\mathbb{C}} % Complex numbers
+%~~~~~~~~~~~~~~~
+% Common functions
+%~~~~~~~~~~~~~~~
+\renewcommand{\exp}[1]{\operatorname{exp}\left(#1\right)} % Exponential
+\newcommand{\indic}[1]{\mbb{I}\left(#1\right)} % Indicator function
+\newcommand{\indicsub}[2]{\mbb{I}_{#2}\left(#1\right)} % Indicator function
+\newcommand{\argmax}{\mathop\mathrm{arg\, max}} % Defining math symbols
+\newcommand{\argmin}{\mathop\mathrm{arg\, min}}
+\renewcommand{\arccos}{\mathop\mathrm{arccos}}
+\newcommand{\dom}{\mathop\mathrm{dom}} % Domain
+\newcommand{\range}{\mathop\mathrm{range}} % Range
+\newcommand{\diag}{\mathop\mathrm{diag}}
+\newcommand{\tr}{\mathop\mathrm{tr}}
+\newcommand{\abs}{\mathop\mathrm{abs}}
+\newcommand{\card}{\mathop\mathrm{card}}
+\newcommand{\sign}{\mathop\mathrm{sign}}
+\newcommand{\prox}{\mathrm{prox}} % prox
+\newcommand{\rank}[1]{\mathrm{rank}(#1)}
+\newcommand{\supp}[1]{\mathrm{supp}(#1)}
+\newcommand{\norm}[1]{\lVert#1\rVert}
+%~~~~~~~~~~~~~~~
+% Common probability symbols
+%~~~~~~~~~~~~~~~
+\newcommand{\family}{\mathcal{P}} % probability family / statistical model
+\newcommand{\iid}{\stackrel{\mathrm{iid}}{\sim}}
+\newcommand{\ind}{\stackrel{\mathrm{ind}}{\sim}}
+\newcommand{\E}{\mathbb{E}} % Expectation symbol
+\newcommand{\Earg}[1]{\E\left[#1\right]}
+\newcommand{\Esubarg}[2]{\E_{#1}\left[#2\right]}
+\renewcommand{\P}{\mathbb{P}} % Probability symbol
+\newcommand{\Parg}[1]{\P\left(#1\right)}
+\newcommand{\Psubarg}[2]{\P_{#1}\left[#2\right]}
+%\newcommand{\Cov}{\mrm{Cov}} % Covariance symbol
+%\newcommand{\Covarg}[1]{\Cov\left[#1\right]}
+%\newcommand{\Covsubarg}[2]{\Cov_{#1}\left[#2\right]}
+%\newcommand{\model}{\mathcal{P}} % probability family / statistical model
+%~~~~~~~~~~~~~~~
+% Distributions
+%~~~~~~~~~~~~~~~
+%\newcommand{\Gsn}{\mathcal{N}}
+%\newcommand{\Ber}{\textnormal{Ber}}
+%\newcommand{\Bin}{\textnormal{Bin}}
+%\newcommand{\Unif}{\textnormal{Unif}}
+%\newcommand{\Mult}{\textnormal{Mult}}
+%\newcommand{\NegMult}{\textnormal{NegMult}}
+%\newcommand{\Dir}{\textnormal{Dir}}
+%\newcommand{\Bet}{\textnormal{Beta}}
+%\newcommand{\Gam}{\textnormal{Gamma}}
+%\newcommand{\Poi}{\textnormal{Poi}}
+%\newcommand{\HypGeo}{\textnormal{HypGeo}}
+%\newcommand{\GEM}{\textnormal{GEM}}
+%\newcommand{\BP}{\textnormal{BP}}
+%\newcommand{\DP}{\textnormal{DP}}
+%\newcommand{\BeP}{\textnormal{BeP}}
+%\newcommand{\Exp}{\textnormal{Exp}}
+%~~~~~~~~~~~~~~~
+% Theorem-like environments
+%~~~~~~~~~~~~~~~
+%\theoremstyle{definition}
+%\newtheorem{definition}{Definition}
+%\newtheorem{example}{Example}
+%\newtheorem{problem}{Problem}
+%\newtheorem{lemma}{Lemma}
+%~~~~~~~~~~~~~~~
+% 组合数学的模板和作业里用到的一些宏包和自定义命令
+%~~~~~~~~~~~~~~~
+\renewcommand{\emph}[1]{\begin{kaishu}#1\end{kaishu}}
+\newcommand{\falfac}[1]{^{\underline{#1}}}
+\newcommand{\binomfrac}[2]{\frac{#1^{\underline{#2}}}{#2!}}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\suminfty}[2]{\sum_{#1=#2}^{\infty}}
+\newcommand{\suminftyk}[0]{\sum_{k=0}^{\infty}}
+\newcommand{\sumint}[3]{\sum_{#1=#2}^{#3}}
+\newcommand{\sumintk}[2]{\sum_{k=#1}^{#2}}
+\newcommand{\suminti}[2]{\sum_{i=#1}^{#2}}
+%~~~~~~~~~~~~~~~
+% 定义新命令
+%~~~~~~~~~~~~~~~
+\newcommand*{\unit}[1]{\mathop{}\!\mathrm{#1}}
+\newcommand*{\dif}{\mathop{}\!\mathrm{d}}%微分算子 d
+\newcommand*{\pdif}{\mathop{}\!\partial}%偏微分算子
+\newcommand*{\cdif}{\mathop{}\!\nabla}%协变导数、nabla 算子
+\newcommand*{\laplace}{\mathop{}\!\Delta}%laplace 算子
+\newcommand*{\deriv}[2]{\frac{\mathrm{d} #1}{\mathrm{d} {#2}}}
+\newcommand*{\derivh}[3]{\frac{\mathrm{d}^{#1} #2}{\mathrm{d} {#3^{#1}}}}
+\newcommand*{\pderiv}[2]{\frac{\partial #1}{\partial {#2}}}
+\newcommand*{\pderivh}[3]{\frac{\partial^{#1} #2}{\partial {#3^{#1}}}}
+\newcommand*{\dderiv}[2]{\dfrac{\mathrm{d} #1}{\mathrm{d} {#2}}}
+\newcommand*{\dderivh}[3]{\dfrac{\mathrm{d}^{#1} #2}{\mathrm{d} {#3^{#1}}}}
+\newcommand*{\dpderiv}[2]{\dfrac{\partial #1}{\partial {#2}}}
+\newcommand*{\dpderivh}[3]{\dfrac{\partial^{#1} #2}{\partial {#3^{#1}}}}
+\newcommand{\me}[1]{\mathrm{e}^{#1}}%e 指数
+\newcommand{\mi}{\mathrm{i}}%虚数单位
+%\newcommand{\mc}{\mathrm{c}}%光速 定义与mathcal冲突
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+%\newcommand{\Rome}[1]{\setcounter{rome}{#1}\Roman{rome}}
+%~~~~~~~~~~~~~~~
+% 公式环境中箭头符号的简写
+%~~~~~~~~~~~~~~~
+\newcommand{\ra}{\rightarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\La}{\Leftarrow}
+\newcommand{\lra}{\leftrightarrow}
+\newcommand{\Lra}{\Leftrightarrow}
+\newcommand{\lgla}{\longleftarrow}
+\newcommand{\Lgla}{\Longleftarrow}
+\newcommand{\lgra}{\longrightarrow}
+\newcommand{\Lgra}{\Longrightarrow}
+\newcommand{\lglra}{\longleftrightarrow}
+\newcommand{\Lglra}{\Longleftrightarrow}
+%~~~~~~~~~~~~~~~
+% 一些数学的环境设置
+%~~~~~~~~~~~~~~~
+%\newcounter{counter_exm}\setcounter{counter_exm}{1}
+%\newcounter{counter_prb}\setcounter{counter_prb}{1}
+%\newcounter{counter_thm}\setcounter{counter_thm}{1}
+%\newcounter{counter_lma}\setcounter{counter_lma}{1}
+%\newcounter{counter_dft}\setcounter{counter_dft}{1}
+%\newcounter{counter_clm}\setcounter{counter_clm}{1}
+%\newcounter{counter_cly}\setcounter{counter_cly}{1}
+%\newtheorem{theorem}{{\hskip 1.7em \bf 定理}}
+%\newtheorem{lemma}[theorem]{\hskip 1.7em 引理}
+%\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem{claim}[theorem]{\hskip 1.7em 命题}
+%\newtheorem{corollary}[theorem]{\hskip 1.7em 推论}
+%\newtheorem{definition}[theorem]{\hskip 1.7em 定义}
+\newcommand{\problem}[1]{{\setlength{\parskip}{10pt}\noindent \bf{#1}}}
+\newenvironment{solution}{{\noindent\hskip 2em \bf 解 \quad}}{}
+\renewenvironment{proof}{{\setlength{\parskip}{7pt}\noindent\hskip 2em \bf 证明 \quad}}{\hfill$\qed$\par}
+%\newenvironment{example}{{\noindent\hskip 2em \bf 例 \arabic{counter_exm}\quad}}{\addtocounter{counter_exm}{1}\par}
+%\newenvironment{concept}[1]{{\bf #1\quad} \begin{kaishu}} {\end{kaishu}\par}
+
+% ----------------------------------------------------------------------
+% Header information
+% ------------------------------------------------------------------------
+
+\begin{document}
+
+\course{B0911005Y-01} 			%optional
+\coursetitle{Introduction to Theory of Computation}	%optional
+\semester{2023 Spring}		%optional
+\lecturer{Mingji Xia}	%optional
+\scribe{吉骏雄}		%required
+\lecturenumber{4}			%required (must be a number)
+\lecturedate{April 18}	%required (omit year)
+
+\maketitle
+
+% ----------------------------------------------------------------------
+% Body of the document
+% ------------------------------------------------------------------------
+
+
+\textbf{第4.1次作业: 4.1, 4.2, 4.3, 4.4}
+
+\problem{4.1} 对于图\ref{fig:4_1}所示的DFA $M$, 回答下列问题，并说明理由。
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=5cm]{image/4.1.png}
+    \caption{题4.1图}
+    \label{fig:4_1}
+\end{figure}
+
+\begin{enumerate}
+    \item $\langle M,0100\rangle \in A_{\mathrm{DFA}}$ 是否成立?
+    \item $\langle M,011 \rangle \in A_{\mathrm{DFA}}$ 是否成立?
+    \item $\langle M\rangle \in A_{\mathrm{DFA}}$ 是否成立?
+    \item $\langle M,0100 \rangle \in A_{\mathrm{REX}}$ 是否成立?
+    \item $\langle M\rangle \in E_{\mathrm{DFA}}$ 是否成立?
+    \item $\langle M,M\rangle \in EQ_{\mathrm{DFA}}$ 是否成立?
+\end{enumerate}
+
+\begin{solution}
+    \begin{enumerate}
+        \item 是. DFA $M$的确能够接受字符串$0100$.
+        \item 否. DFA $M$不接受字符串$0100$.
+        \item 否. 输入只有一个DFA, 没有字符串.
+        \item 否. 输入前半部分是DFA, 不是正则语言.
+        \item 否. $M$接受的语言非空.
+        \item 是. $M$和$M$自身接受的语言必然相同.
+    \end{enumerate}
+\end{solution}
+
+
+\problem{4.2} 考虑一个DFA 和一个正则表达式是否等价的问题。将这个问题表述为一个语言并证明它是可判定的。
+
+\begin{proof}
+    设: $EQ_{D\&R} = \{ \langle A, R \rangle \mid A \text{是一个DFA, } R \text{是一个正则表达式, 且} \forall\, \omega \in L(A)\text{, }R \text{ 派生 } \omega  \}$. 我们可以构造一个判断此语言的图灵机$M$:
+
+    M =\\
+    ``对于输入$\langle A, R \rangle$, 其中$A$是一个DFA, $R$是一个正则表达式:
+    \begin{enumerate}
+        \item 将$R$改写做只含有起始状态、接受状态以及一个从起始状态指向接受状态的箭头的CNFA, 箭头上的正则表达式就是$R$.
+        \item 由正则表达式构建出一台对应的NFA$B$.
+        \item 将此NFA$B$转化为DFA$C$.
+        \item 模拟能够判定$EQ_{\mathrm{DFA}}$的图灵机, 输入$\langle A, C \rangle$, 判断这两者能够接收的语言是否相同. 若是, 则接收, 否则拒绝.
+    \end{enumerate}
+    ''
+\end{proof}
+
+
+\problem{4.3} 设 $ALL_{\mathrm{DFA}} = \{ \langle A \rangle \mid A \text{是一个DFA, 且}L(A) = \Sigma^*\}$. 证明$ALL_{\mathrm{DFA}}$是可判定的.
+
+\begin{proof}
+    我们可以构造一个判断此语言的图灵机$M$:
+
+    M =\\
+    ``对于输入$\langle A \rangle$, 其中$A$是一个DFA:
+    \begin{enumerate}
+        \item 构造DFA $A'$, 使得$L(A') = \overline{L(A)}$. 这是可以做到的事情, 其实只要将接受状态和拒绝状态反转即可.
+        \item 模拟图灵机$E_{\mathrm{DFA}}$, 判断DFA $A'$能接收的语言是否为空. 若为空, 则接收, 否则拒绝.
+    \end{enumerate}
+    ''
+\end{proof}
+
+
+
+\problem{4.4} 设 $A\varepsilon_{\mathrm{CFG}} = \{ \langle G \rangle \mid G \text{ 是一个生成 } \varepsilon \text{ 的} \mathrm{CFG} \}$. 证明$A\varepsilon_{\mathrm{CFG}}$是可判定的.
+
+\begin{proof}
+    我们可以构造一个判断此语言的图灵机$M$:
+
+    M =\\
+    ``对于输入$\langle G \rangle$, 其中$G$是一个CFG, 它能生成$\varepsilon$:
+    \begin{enumerate}
+        \item 将$G$转换为一个与之等价地乔姆斯基文法.
+        \item 由于乔姆斯基文法仅可能在初始变元引出的法则中派生出$\varepsilon$, 即唯一可能包含$\varepsilon$的规则为$S \to \varepsilon$, 我们仅需检查是否有这一条规则. 若有这条规则, 则接收, 否则拒绝.
+    \end{enumerate}
+    ''
+\end{proof}
+
+
+
+
+
+
+\end{document}
